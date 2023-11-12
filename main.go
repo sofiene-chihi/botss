@@ -8,20 +8,26 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 var (
 	//go:embed templates/*
 	templatesEmbed embed.FS
-
-	env = os.Getenv("GO_ENV")
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file:", err)
+	}
+
 	fmt.Println("Hello to e-commerce chatbot")
 	r := gin.Default()
 
-	if env == "prod" || env == "dev" {
+	stage := os.Getenv("STAGE")
+	if stage == "prod" || stage == "staging" {
 		fmt.Println("production")
 		templ := template.Must(template.New("").ParseFS(
 			templatesEmbed, "templates/html/*.html",
@@ -34,6 +40,8 @@ func main() {
 	}
 
 	r.GET("/", handlers.ConversationTemplate)
+	r.POST("/send-message", handlers.SendMessage)
+
 	errors := r.Run(":8080")
 	if errors != nil {
 		return

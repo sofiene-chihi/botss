@@ -65,6 +65,14 @@
         color: #fff;
         cursor: pointer;
       }
+
+      @media only screen and (max-width: 767px) {
+        #chat-container {
+        max-width: 90%;
+      }
+
+        /* Add more styles specific to phones as needed */
+        }
     </style>
   </head>
   <body>
@@ -88,11 +96,7 @@
 
         addMessage("user-message", userMessage);
 
-        // Simulate automatic response
-        setTimeout(function () {
-          addMessage("response-message", "Okay sir");
-        }, 500);
-
+        botResponse = sendNewMessage(userMessage);
         document.getElementById("user-input").value = "";
       }
 
@@ -112,6 +116,24 @@
 
         // Scroll to the bottom of the messages
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function sendNewMessage(message) {
+        fetch("/send-message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: message }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response, update the conversation display, etc.
+            console.log(data);
+            addMessage("response-message", data.message);
+            return;
+          })
+          .catch((error) => console.error("Error:", error));
       }
     </script>
   </body>
