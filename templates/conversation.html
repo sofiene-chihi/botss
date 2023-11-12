@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: url("templates/images/page-bg.webp") center/cover;
+      }
+
+      #chat-container {
+        max-width: 50%;
+        margin: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      #messages {
+        background-color: rgba(248, 248, 248, 0.6);
+        flex: 1;
+        padding: 10px;
+        overflow-y: scroll;
+      }
+
+      .message {
+        margin-bottom: 10px;
+        padding: 8px;
+        border-radius: 5px;
+      }
+
+      .user-message {
+        background-color: #fff;
+      }
+
+      .response-message {
+        background-color: #c9c5c5;
+      }
+
+      #input-container {
+        display: flex;
+        padding: 10px;
+        background-color: #eee;
+      }
+
+      #user-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+      }
+
+      #send-button {
+        padding: 8px 15px;
+        border: 1px solid #4caf50;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="messages"></div>
+      <div id="input-container">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Type your message..."
+          onkeydown="handleKeyPress(event)"
+        />
+        <button id="send-button" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      function sendMessage() {
+        var userMessage = document.getElementById("user-input").value;
+        if (userMessage.trim() === "") return;
+
+        addMessage("user-message", userMessage);
+
+        // Simulate automatic response
+        setTimeout(function () {
+          addMessage("response-message", "Okay sir");
+        }, 500);
+
+        document.getElementById("user-input").value = "";
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          event.preventDefault(); // Prevents the default behavior of the Enter key (e.g., a line break in a textarea)
+          sendMessage();
+        }
+      }
+
+      function addMessage(className, text) {
+        var messagesContainer = document.getElementById("messages");
+        var messageElement = document.createElement("div");
+        messageElement.className = "message " + className;
+        messageElement.textContent = text;
+        messagesContainer.appendChild(messageElement);
+
+        // Scroll to the bottom of the messages
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
