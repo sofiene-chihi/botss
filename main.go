@@ -2,6 +2,7 @@ package main
 
 import (
 	"e-commerce-chatbot/handlers"
+	"e-commerce-chatbot/models"
 	"embed"
 	"fmt"
 	"html/template"
@@ -23,7 +24,7 @@ func main() {
 		fmt.Println("Error loading .env file:", err)
 	}
 
-	fmt.Println("Hello to e-commerce chatbot")
+	models.ConnectRedis()
 	r := gin.Default()
 
 	stage := os.Getenv("STAGE")
