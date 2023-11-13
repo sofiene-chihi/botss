@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"e-commerce-chatbot/handlers"
 	"e-commerce-chatbot/models"
 	"embed"
@@ -25,6 +26,18 @@ func main() {
 	}
 
 	models.ConnectRedis()
+
+	client, err := models.ConnectToMongoDB()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
 	r := gin.Default()
 
 	stage := os.Getenv("STAGE")

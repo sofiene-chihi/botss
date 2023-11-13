@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  redis:
+    image: redis
+    container_name: redis-ecommerce-container
+    ports:
+      - "4000:6379"
+    volumes:
+      - redis_data:/data
+
+  mongodb:
+    image: mongo
+    container_name: mongo-ecommerce-container
+    ports:
+      - "27017:27017"
+    env_file:
+      - .container.env
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+volumes:
+  redis_data:
+  mongodb_data:
