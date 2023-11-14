@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"e-commerce-chatbot/handlers"
 	"e-commerce-chatbot/models"
 	"embed"
@@ -27,16 +26,10 @@ func main() {
 
 	models.ConnectRedis()
 
-	client, err := models.ConnectToMongoDB()
+	_, err = models.ConnectToMongoDB()
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			fmt.Println(err)
-		}
-	}()
 
 	r := gin.Default()
 
@@ -55,6 +48,7 @@ func main() {
 
 	r.GET("/", handlers.ConversationTemplate)
 	r.POST("/send-message", handlers.SendMessage)
+	r.GET("/new-conversation", handlers.CreateNewConversation)
 
 	errors := r.Run(":8080")
 	if errors != nil {

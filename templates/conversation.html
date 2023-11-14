@@ -68,11 +68,11 @@
 
       @media only screen and (max-width: 767px) {
         #chat-container {
-        max-width: 90%;
-      }
+          max-width: 90%;
+        }
 
         /* Add more styles specific to phones as needed */
-        }
+      }
     </style>
   </head>
   <body>
@@ -135,6 +135,31 @@
           })
           .catch((error) => console.error("Error:", error));
       }
+
+      function startConversation() {
+        fetch("/new-conversation", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response, update the conversation display, etc.
+            console.log(data);
+            history.pushState(
+              null,
+              null,
+              window.location.href + data.conversationId
+            );
+            return;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      window.onload = function () {
+        startConversation();
+      };
     </script>
   </body>
 </html>

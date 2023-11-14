@@ -14,8 +14,8 @@ func SendBotMessage(message string) (models.BotResponse, error) {
 	API_URL := os.Getenv("OPEN_AI_API")
 	TOKEN := os.Getenv("OPEN_AI_API_KEY")
 
-	REQUEST_URL := fmt.Sprintf("%s%s", API_URL, "/chat/completions")
-	BEARER_TOKEN := fmt.Sprintf("%s%s", "Bearer ", TOKEN)
+	REQUEST_URL := fmt.Sprintf("%s/chat/completions", API_URL)
+	BEARER_TOKEN := fmt.Sprintf("Bearer %s", TOKEN)
 	var botResponse models.BotResponse
 
 	systemPrompt := "you are a pizza delivery guy called Chmakk, pretend to be like that during all our conversation"
