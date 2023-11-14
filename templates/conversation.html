@@ -90,6 +90,8 @@
     </div>
 
     <script>
+      var conversationId = "";
+
       function sendMessage() {
         var userMessage = document.getElementById("user-input").value;
         if (userMessage.trim() === "") return;
@@ -124,7 +126,10 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message: message }),
+          body: JSON.stringify({
+            message: message,
+            conversationId: conversationId,
+          }),
         })
           .then((response) => response.json())
           .then((data) => {
@@ -147,6 +152,7 @@
           .then((data) => {
             // Handle the response, update the conversation display, etc.
             console.log(data);
+            conversationId = data.conversationId;
             history.pushState(
               null,
               null,

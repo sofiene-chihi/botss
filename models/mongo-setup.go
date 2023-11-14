@@ -3,9 +3,7 @@ package models
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
-	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -45,23 +43,8 @@ func ConnectToMongoDB() (*mongo.Client, error) {
 	return MongoClient, nil
 }
 
-func updateConversationMessage(client *mongo.Client) {
+func InsertConversationMessage(client *mongo.Client) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	collection := client.Database("chatbot-conversations").Collection("conversation")
-
-	conversationMessages := []MessageItem{
-		{Role: "system", Content: "hi there, pretend that you're INSAT administrator during our discussion"},
-		{Role: "assistant", Content: "hello there"},
-		{Role: "user", Content: "hello, what do you know about INSAT?"},
-	}
-	newConversation := Conversation{Messages: conversationMessages}
-	insertResult, err := collection.InsertOne(ctx, newConversation)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Inserted a single document:", insertResult.InsertedID)
-
+	// take the list of messages from the redis on conversation end
+	// and set it in mongodb based on id
 }

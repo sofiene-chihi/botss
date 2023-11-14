@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"e-commerce-chatbot/models"
@@ -19,7 +20,7 @@ func ConversationTemplate(c *gin.Context) {
 
 func CreateNewConversation(c *gin.Context) {
 
-	systemPrompt := "hi there, pretend that you're INSAT administrator during our discussion"
+	systemPrompt := os.Getenv("SYSTEM_PROMPT")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -45,6 +46,8 @@ func CreateNewConversation(c *gin.Context) {
 	insertedIDString := insertedID.Hex()
 	fmt.Println("Inserted ID as string:", insertedIDString)
 
+	models.AddMessagesToConversation(insertedIDString, conversationMessages)
+
 	c.JSON(http.StatusOK, gin.H{"conversationId": insertedIDString})
 }
 
@@ -58,15 +61,24 @@ func SendMessage(c *gin.Context) {
 
 	fmt.Println(requestData["message"])
 	sentMessage := requestData["message"]
+	conversationId := requestData["conversationId"]
 
-	botResponse, err := SendBotMessage(sentMessage)
+	previousContext, err := models.GetConversationById(conversationId)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	newMessage := models.MessageItem{Role: "user", Content: sentMessage}
+	updatedContext := append(previousContext, newMessage)
+
+	botResponse, err := SendBotMessage(updatedContext)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	// Print the response body as a string
 	returnedMessage := string(botResponse.Choices[0].Message.Content)
+	newResponse := models.MessageItem{Role: "assistant", Content: returnedMessage}
 
+	models.AddMessagesToConversation(conversationId, []models.MessageItem{newMessage, newResponse})
 	c.JSON(http.StatusOK, gin.H{"message": returnedMessage})
 }

@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func SendBotMessage(message string) (models.BotResponse, error) {
+func SendBotMessage(context []models.MessageItem) (models.BotResponse, error) {
 	API_URL := os.Getenv("OPEN_AI_API")
 	TOKEN := os.Getenv("OPEN_AI_API_KEY")
 
@@ -18,14 +18,11 @@ func SendBotMessage(message string) (models.BotResponse, error) {
 	BEARER_TOKEN := fmt.Sprintf("Bearer %s", TOKEN)
 	var botResponse models.BotResponse
 
-	systemPrompt := "you are a pizza delivery guy called Chmakk, pretend to be like that during all our conversation"
+	// systemPrompt := os.Getenv("SYSTEM_PROMPT")
 
 	payload := map[string]interface{}{
-		"model": "gpt-3.5-turbo",
-		"messages": []map[string]string{
-			{"role": "system", "content": systemPrompt},
-			{"role": "user", "content": message},
-		},
+		"model":       "gpt-3.5-turbo",
+		"messages":    context,
 		"temperature": 0.7,
 	}
 
@@ -61,7 +58,7 @@ func SendBotMessage(message string) (models.BotResponse, error) {
 		fmt.Println("Error reading response body:", err)
 		return botResponse, err
 	}
-	fmt.Println(string(responseBody))
+	// fmt.Println(string(responseBody))
 
 	error := json.Unmarshal(responseBody, &botResponse)
 	if error != nil {
