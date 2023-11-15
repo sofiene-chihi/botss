@@ -49,6 +49,7 @@ func main() {
 	r.GET("/", handlers.ConversationTemplate)
 	r.POST("/send-message", handlers.SendMessage)
 	r.GET("/new-conversation", handlers.CreateNewConversation)
+	r.POST("/save-conversation", handlers.SaveConversation)
 
 	errors := r.Run(":8080")
 	if errors != nil {

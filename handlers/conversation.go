@@ -18,6 +18,21 @@ func ConversationTemplate(c *gin.Context) {
 	c.HTML(http.StatusOK, "conversation.html", gin.H{})
 }
 
+func SaveConversation(c *gin.Context) {
+
+	var requestData map[string]string
+	if err := c.ShouldBindJSON(&requestData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println(requestData["conversationId"])
+	conversationId := requestData["conversationId"]
+
+	models.InsertConversationMessage(conversationId)
+	c.JSON(http.StatusOK, gin.H{"Result": "Conversation saved!!"})
+}
+
 func CreateNewConversation(c *gin.Context) {
 
 	systemPrompt := os.Getenv("SYSTEM_PROMPT")

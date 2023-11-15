@@ -92,6 +92,30 @@
     <script>
       var conversationId = "";
 
+      window.addEventListener("beforeunload", function (event) {
+        // Cancel the event
+        event.preventDefault();
+        // Chrome requires returnValue to be set
+        event.returnValue = "";
+        console.log("good bye");
+        fetch("/save-conversation", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            conversationId: conversationId,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response, update the conversation display, etc.
+            console.log(data);
+            return;
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+
       function sendMessage() {
         var userMessage = document.getElementById("user-input").value;
         if (userMessage.trim() === "") return;
