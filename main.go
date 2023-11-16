@@ -6,6 +6,8 @@ import (
 	"embed"
 	"fmt"
 	"html/template"
+	"io/fs"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +17,12 @@ import (
 var (
 	//go:embed templates/*
 	templatesEmbed embed.FS
+
+	//go:embed templates/images
+	staticEmbed embed.FS
+
+	//go:embed .env
+	envFile embed.FS
 )
 
 func main() {
@@ -37,9 +45,11 @@ func main() {
 	if stage == "prod" || stage == "staging" {
 		fmt.Println("production")
 		templ := template.Must(template.New("").ParseFS(
-			templatesEmbed, "templates/html/*.html",
+			templatesEmbed, "templates/*.html",
 		))
 		r.SetHTMLTemplate(templ)
+		staticFS, _ := fs.Sub(staticEmbed, "templates/images")
+		r.StaticFS("/templates/images", http.FS(staticFS))
 
 	} else {
 		r.LoadHTMLGlob("templates/*.html")

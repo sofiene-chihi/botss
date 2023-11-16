@@ -1,3 +1,4 @@
 .env
 container/.container.env
 container/mongo-init.js
+build/
