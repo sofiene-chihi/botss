@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"e-commerce-chatbot/models"
+	"chatbot-store/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"bytes"
-	"e-commerce-chatbot/models"
+	"chatbot-store/models"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"

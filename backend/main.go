@@ -1,8 +1,8 @@
 package main
 
 import (
-	"e-commerce-chatbot/handlers"
-	"e-commerce-chatbot/models"
+	"chatbot-store/handlers"
+	"chatbot-store/models"
 	"embed"
 	"fmt"
 	"html/template"
