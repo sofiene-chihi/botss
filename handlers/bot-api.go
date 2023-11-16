@@ -18,8 +18,6 @@ func SendBotMessage(context []models.MessageItem) (models.BotResponse, error) {
 	BEARER_TOKEN := fmt.Sprintf("Bearer %s", TOKEN)
 	var botResponse models.BotResponse
 
-	// systemPrompt := os.Getenv("SYSTEM_PROMPT")
-
 	payload := map[string]interface{}{
 		"model":       "gpt-3.5-turbo",
 		"messages":    context,

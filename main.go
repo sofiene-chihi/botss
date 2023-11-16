@@ -28,6 +28,7 @@ var (
 func main() {
 
 	err := godotenv.Load()
+
 	if err != nil {
 		fmt.Println("Error loading .env file:", err)
 	}
@@ -42,7 +43,7 @@ func main() {
 	r := gin.Default()
 
 	stage := os.Getenv("STAGE")
-	if stage == "prod" || stage == "staging" {
+	if stage == "prod" {
 		fmt.Println("production")
 		templ := template.Must(template.New("").ParseFS(
 			templatesEmbed, "templates/*.html",
