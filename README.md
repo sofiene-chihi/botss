@@ -14,3 +14,9 @@ go get
 make run-db-containers
 make run
 ```
+
+### Project Architecture
+
+<p align="center">
+  <img src="./assets/images/chatbot-store-arch.png" title="Project architecture">
+</p>
