@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrl: './bots-grid.component.css',
 })
 export class BotsGridComponent {
-
+  items: any[] = [
+    { id: 1, name: 'bot 1' },
+    { id: 2, name: 'bot 2' },
+    { id: 3, name: 'bot 3' },
+    { id: 4, name: 'bot 1' },
+    { id: 5, name: 'bot 2' },
+    { id: 6, name: 'bot 3' },
+  ];
 }

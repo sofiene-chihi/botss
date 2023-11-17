@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BotItemComponent } from './bot-item.component';
+import { BotElementComponent } from './bot-element.component';
 
-describe('BotItemComponent', () => {
-  let component: BotItemComponent;
-  let fixture: ComponentFixture<BotItemComponent>;
+describe('BotElementComponent', () => {
+  let component: BotElementComponent;
+  let fixture: ComponentFixture<BotElementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BotItemComponent]
+      declarations: [BotElementComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(BotItemComponent);
+    fixture = TestBed.createComponent(BotElementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

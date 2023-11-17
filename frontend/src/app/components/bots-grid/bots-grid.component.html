@@ -1,1 +1,7 @@
-<p>bots-grid works!</p>
+<div class="grid-container">
+  <mat-grid-list cols="3" rowHeight="3:1">
+    <mat-grid-tile *ngFor="let item of items">
+      <app-bot-element [botName]="item.name"></app-bot-element>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

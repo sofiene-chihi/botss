@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BotsGridComponent } from './components/bots-grid/bots-grid.component';
-import { BotItemComponent } from './components/bots-grid/bot-item/bot-item.component';
+import { BotElementComponent } from './components/bots-grid/bot-element/bot-element.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     AppComponent,
     HeaderComponent,
     BotsGridComponent,
-    BotItemComponent,
+    BotElementComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, MatGridListModule],
   providers: [],
