@@ -1,0 +1,15 @@
+<div class="conversation-page">
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Type your message..."
+            (keydown)="handleKeyPress($event)"
+          />
+          <button id="send-button" (click)="sendMessage()">Send</button>
+        </div>
+      </div>
+</div>
+

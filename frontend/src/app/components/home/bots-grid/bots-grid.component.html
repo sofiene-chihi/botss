@@ -1,0 +1,8 @@
+<div class="grid-container">
+  <mat-grid-list cols="3" rowHeight="3:2">
+    <mat-grid-tile *ngFor="let item of items">
+      <app-bot-element routerLink="/conversation"
+       [botName]="item.name" [botImage]="item.image"></app-bot-element>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

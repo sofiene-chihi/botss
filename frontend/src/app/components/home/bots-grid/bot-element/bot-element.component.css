@@ -1,0 +1,13 @@
+.example-card {
+  max-width: 400px;
+}
+
+mat-card-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+img {
+  max-width: 400px;
+  max-height: auto;
+}
