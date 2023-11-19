@@ -1,0 +1,13 @@
+.message {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.user-message {
+  background-color: #fff;
+}
+
+.response-message {
+  background-color: #c9c5c5;
+}

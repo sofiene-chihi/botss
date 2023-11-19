@@ -5,7 +5,7 @@ import { ConversationComponent } from './components/conversation/conversation.co
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'conversation', component: ConversationComponent },
+  { path: 'conversation/:id', component: ConversationComponent },
 ];
 
 @NgModule({

@@ -14,4 +14,11 @@ export class ConversationService {
   createConversation(): Observable<any> {
     return this.http.get(`${API_URL}/new-conversation`);
   }
+
+  sendNewMessage(message: string, conversationId: string) {
+    return this.http.post(`${API_URL}/send-message`, {
+      message: message,
+      conversationId: conversationId,
+    });
+  }
 }

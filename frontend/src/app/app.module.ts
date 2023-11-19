@@ -12,7 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { HomeComponent } from './components/home/home.component';
-import { ConversationService } from './services/conversation.service';
+import { FormsModule } from '@angular/forms';
+import { MessageItemComponent } from './components/conversation/message-item/message-item.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ConversationService } from './services/conversation.service';
     BotElementComponent,
     ConversationComponent,
     HomeComponent,
+    MessageItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +32,7 @@ import { ConversationService } from './services/conversation.service';
     MatButtonModule,
     MatCardModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

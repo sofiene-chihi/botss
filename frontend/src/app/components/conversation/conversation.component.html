@@ -1,15 +1,17 @@
 <div class="conversation-page">
-    <div id="chat-container">
-        <div id="messages"></div>
-        <div id="input-container">
-          <input
-            type="text"
-            id="user-input"
-            placeholder="Type your message..."
-            (keydown)="handleKeyPress($event)"
-          />
-          <button id="send-button" (click)="sendMessage()">Send</button>
-        </div>
-      </div>
+  <div id="chat-container">
+    <div class="messagesContainer" *ngFor="let message of conversationMessages">
+      <app-message-item [messageContent]="message"></app-message-item>
+    </div>
+    <div id="input-container">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message..."
+        [(ngModel)]="messageInput"
+        (keyup)="handleKeyPress($event)"
+      />
+      <button id="send-button" (click)="sendMessage()">Send</button>
+    </div>
+  </div>
 </div>
-

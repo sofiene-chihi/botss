@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversationService } from '../../services/conversation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-conversation',
@@ -7,31 +8,35 @@ import { ConversationService } from '../../services/conversation.service';
   styleUrl: './conversation.component.css',
 })
 export class ConversationComponent implements OnInit {
-  constructor(private conversationService: ConversationService) {}
+  conversationId: string = '';
+  messageInput: string = '';
+  conversationMessages: string[] = [];
 
+  constructor(private conversationService: ConversationService) {}
   ngOnInit(): void {
-    this.conversationService.createConversation().subscribe(
-      (response) => {
-        console.log(response); // Handle the fetched data here
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
+    this.conversationId = '';
+    this.conversationMessages = ['salut', 'salut cv'];
   }
 
   handleKeyPress(event: KeyboardEvent) {
-    // Handle key press logic here
-    // You can access event properties like event.key, event.keyCode, etc.
-    // For example:
-    if (event.key === 'Enter') {
+    console.log('sending message');
+    if (event.key === 'Enter' || event.keyCode === 13) {
       this.sendMessage();
     }
   }
 
   sendMessage() {
-    console.log('Sending message');
-    // Implement logic to send the message
-    // This function will be called when the "Send" button is clicked
+    console.log('Sending message', this.messageInput);
+    this.messageInput = '';
+    this.conversationService
+      .sendNewMessage(this.messageInput, this.conversationId)
+      .subscribe(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
   }
 }
