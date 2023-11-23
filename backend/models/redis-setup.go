@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -12,7 +13,7 @@ var RedisClient *redis.Client
 func ConnectRedis() {
 	fmt.Println("Connecting to Redis")
 
-	addr := "localhost:4000" // Default address
+	addr := fmt.Sprintf("%s:4000", os.Getenv("REDIS_HOST"))
 
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     addr,

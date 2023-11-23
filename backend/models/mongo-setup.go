@@ -20,11 +20,13 @@ func ConnectToMongoDB() (*mongo.Client, error) {
 	mongoUser := os.Getenv("MONGO_INITDB_ROOT_USERNAME")
 	mongoPass := os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
 	mongoDatabase := os.Getenv("MONGO_INITDB_DATABASE")
+	
 
 	fmt.Println("database variables")
 	fmt.Println(mongoUser, mongoPass, mongoDatabase)
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(options.Credential{
+	uri := fmt.Sprintf("mongodb://%s:27017", os.Getenv("MONGO_HOST"))
+	clientOptions := options.Client().ApplyURI(uri).SetAuth(options.Credential{
 		Username:   mongoUser,
 		Password:   mongoPass,
 		AuthSource: "admin", // Replace with the authentication database
