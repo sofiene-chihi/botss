@@ -30,6 +30,7 @@ jobs:
       - name: Build Golang backend Docker image
         run: |
           cd backend
+          ls -l
           docker build -t sofienechihi/my-repo:chatbot-store-backend .
 
       - name: Push Docker images to DockerHub

@@ -23,6 +23,7 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built Angular app from the previous stage to nginx html directory
 COPY --from=build /app/dist/out/browser/ /usr/share/nginx/html
+COPY --from=build /app/nginx.config /etc/nginx/nginx.conf
 
 # Copy custom nginx configuration if needed
 # COPY nginx.conf /etc/nginx/nginx.conf

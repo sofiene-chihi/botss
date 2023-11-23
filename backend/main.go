@@ -35,15 +35,20 @@ func main() {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
+	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	fmt.Println(port)
 
-	stage := os.Getenv("STAGE")
-	fmt.Println(stage)
 	r.GET("/conversation/:id", handlers.GetConversationById)
 	r.POST("/send-message", handlers.SendMessage)
 	r.GET("/new-conversation", handlers.CreateNewConversation)
 	r.POST("/save-conversation", handlers.SaveConversation)
+	r.GET("/healthCheck", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
 
-	errors := r.Run(":8080")
+	errors := r.Run(port)
 	if errors != nil {
 		return
 	}
