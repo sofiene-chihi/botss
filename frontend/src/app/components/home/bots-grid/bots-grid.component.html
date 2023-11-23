@@ -1,6 +1,6 @@
 <div class="grid-container">
-  <mat-grid-list cols="3" rowHeight="3:2">
-    <mat-grid-tile *ngFor="let item of items">
+  <mat-grid-list cols="{{gridColumns}}" rowHeight="{{rowHeight1}}:{{rowHeight2}}">
+    <mat-grid-tile class="grid-element" *ngFor="let item of items">
       <app-bot-element (click)="openNewConversation()"
        [botName]="item.name" [botImage]="item.image"></app-bot-element>
     </mat-grid-tile>
