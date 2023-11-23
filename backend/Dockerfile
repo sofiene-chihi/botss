@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 # Build the Golang application
-RUN CGO_ENABLED=0 GOOS=linux go build -o app ./cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o app ./main.go
 
 # Stage 2: Create a minimal image to run the Golang app
 FROM alpine:latest
