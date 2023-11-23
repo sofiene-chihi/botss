@@ -45,6 +45,27 @@ func ConversationTemplate(c *gin.Context) {
 	c.HTML(http.StatusOK, "conversation.html", gin.H{})
 }
 
+func GetConversationById(c *gin.Context) {
+	
+	conversationId := c.Param("id")
+	conversationContent, err := models.GetConversationById(conversationId)
+	if err != nil {
+		fmt.Println("Error retrieving objects from Redis:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "Could not get conversation by ID!!"})
+	}
+	if len(conversationContent) > 0 {
+		// Remove the first element by creating a new slice that excludes it
+		filteredConversationContent := conversationContent[1:]
+		fmt.Println("Slice after removing the first element:", filteredConversationContent)
+		fmt.Println(conversationContent)
+		c.JSON(http.StatusOK, gin.H{"conversationContent": filteredConversationContent})
+	} else {
+		// Remove the first element by creating a new slice that excludes it
+		emptyContent := []models.MessageItem{}
+		c.JSON(http.StatusOK, gin.H{"conversationContent": emptyContent })
+	}
+}
+
 func SaveConversation(c *gin.Context) {
 
 	var requestData map[string]string
@@ -62,13 +83,12 @@ func SaveConversation(c *gin.Context) {
 
 func CreateNewConversation(c *gin.Context) {
 
-	// systemPrompt := os.Getenv("SYSTEM_PROMPT")
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	collection := models.MongoClient.Database("chatbot-conversations").Collection("conversation")
 
+	fmt.Println(SystemPrompt)
 	conversationMessages := []models.MessageItem{
 		{Role: "system", Content: SystemPrompt},
 	}

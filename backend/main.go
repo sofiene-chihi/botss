@@ -60,6 +60,7 @@ func main() {
 	}
 
 	r.GET("/", handlers.ConversationTemplate)
+	r.GET("/conversation/:id", handlers.GetConversationById)
 	r.POST("/send-message", handlers.SendMessage)
 	r.GET("/new-conversation", handlers.CreateNewConversation)
 	r.POST("/save-conversation", handlers.SaveConversation)

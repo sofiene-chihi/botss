@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversationService } from '../../services/conversation.service';
-import { Router } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage.service';
+import { GetConversationResponse } from '../../interfaces/getConversationResponse.interface';
 
 @Component({
   selector: 'app-conversation',
@@ -12,14 +13,30 @@ export class ConversationComponent implements OnInit {
   messageInput: string = '';
   conversationMessages: string[] = [];
 
-  constructor(private conversationService: ConversationService) {}
+  constructor(
+    private conversationService: ConversationService,
+    private localStorageService: LocalstorageService
+  ) {}
   ngOnInit(): void {
-    this.conversationId = '';
-    this.conversationMessages = ['salut', 'salut cv'];
+    this.conversationId = this.localStorageService.getItem('conversationId');
+
+    this.conversationService.getConversationById(this.conversationId).subscribe(
+      (response: GetConversationResponse) => {
+        console.log(response);
+        if (response.conversationContent.length > 0) {
+          console.log(response.conversationContent);
+          response.conversationContent.map((message: any) => {
+            this.conversationMessages.push(message.content);
+          });
+        }
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 
   handleKeyPress(event: KeyboardEvent) {
-    console.log('sending message');
     if (event.key === 'Enter' || event.keyCode === 13) {
       this.sendMessage();
     }
@@ -27,12 +44,16 @@ export class ConversationComponent implements OnInit {
 
   sendMessage() {
     console.log('Sending message', this.messageInput);
+    if (this.messageInput.trim().length == 0) return;
+    this.conversationMessages.push(this.messageInput);
+    let messageToSend = this.messageInput;
     this.messageInput = '';
     this.conversationService
-      .sendNewMessage(this.messageInput, this.conversationId)
+      .sendNewMessage(messageToSend, this.conversationId)
       .subscribe(
-        (response) => {
+        (response: any) => {
           console.log(response);
+          this.conversationMessages.push(response.message);
         },
         (error) => {
           console.error('Error fetching data:', error);

@@ -1,7 +1,7 @@
 <div class="conversation-page">
   <div id="chat-container">
-    <div class="messagesContainer" *ngFor="let message of conversationMessages">
-      <app-message-item [messageContent]="message"></app-message-item>
+    <div class="messagesContainer">
+      <app-message-item *ngFor="let message of conversationMessages" [messageContent]="message"></app-message-item>
     </div>
     <div id="input-container">
       <input
