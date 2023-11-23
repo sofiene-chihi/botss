@@ -1,5 +1,5 @@
 # Stage 1: Build Golang binary
-FROM golang:1.17 AS build
+FROM golang:1.20-alpine AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 # Build the Golang application
-RUN CGO_ENABLED=0 GOOS=linux go build -o app ./main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o app main.go
 
 # Stage 2: Create a minimal image to run the Golang app
 FROM alpine:latest

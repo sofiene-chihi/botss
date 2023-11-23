@@ -24,6 +24,9 @@ jobs:
           cd frontend
           docker build -t sofienechihi/my-repo:chatbot-store-frontend .
 
+      - name: Retrieve and decode secret
+        run: echo "${{ secrets.ENV_FILE_CONTENT }}" | base64 --decode > backend/.env
+    
       - name: Build Golang backend Docker image
         run: |
           cd backend
@@ -32,4 +35,4 @@ jobs:
       - name: Push Docker images to DockerHub
         run: |
           docker push sofienechihi/my-repo:chatbot-store-frontend
-          docker push sofienechihi/my-repo:chatbot-store-backend  
+          docker push sofienechihi/my-repo:chatbot-store-backend
