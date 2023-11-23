@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ConversationService } from '../../services/conversation.service';
 import { LocalstorageService } from '../../services/localstorage.service';
 import { GetConversationResponse } from '../../interfaces/getConversationResponse.interface';
+import { Message } from '../../interfaces/message.interface';
+import { SendMessageResponse } from '../../interfaces/sendMessageResponse.interface';
 
 @Component({
   selector: 'app-conversation',
@@ -25,7 +27,7 @@ export class ConversationComponent implements OnInit {
         console.log(response);
         if (response.conversationContent.length > 0) {
           console.log(response.conversationContent);
-          response.conversationContent.map((message: any) => {
+          response.conversationContent.map((message: Message) => {
             this.conversationMessages.push(message.content);
           });
         }
@@ -51,7 +53,7 @@ export class ConversationComponent implements OnInit {
     this.conversationService
       .sendNewMessage(messageToSend, this.conversationId)
       .subscribe(
-        (response: any) => {
+        (response: SendMessageResponse) => {
           console.log(response);
           this.conversationMessages.push(response.message);
         },

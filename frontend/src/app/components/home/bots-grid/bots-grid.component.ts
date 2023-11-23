@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConversationService } from '../../../services/conversation.service';
 import { Router } from '@angular/router';
 import { LocalstorageService } from '../../../services/localstorage.service';
+import { CreateConversationResponse } from '../../../interfaces/createConversationResponse.interface';
 
 @Component({
   selector: 'app-bots-grid',
@@ -52,7 +53,7 @@ export class BotsGridComponent implements OnInit {
 
   openNewConversation() {
     this.conversationService.createConversation().subscribe(
-      (response) => {
+      (response:CreateConversationResponse) => {
         console.log(response.conversationId);
         this.localStorageService.setItem(
           'conversationId',
