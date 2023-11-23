@@ -13,7 +13,7 @@ var RedisClient *redis.Client
 func ConnectRedis() {
 	fmt.Println("Connecting to Redis")
 
-	addr := fmt.Sprintf("%s:4000", os.Getenv("REDIS_HOST"))
+	addr := fmt.Sprintf("%s:6379", os.Getenv("REDIS_HOST"))
 
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     addr,
