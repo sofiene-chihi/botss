@@ -5,8 +5,6 @@ import (
 	"chatbot-store/models"
 	"embed"
 	"fmt"
-	"html/template"
-	"io/fs"
 	"net/http"
 	"os"
 
@@ -15,12 +13,6 @@ import (
 )
 
 var (
-	//go:embed templates/*
-	templatesEmbed embed.FS
-
-	//go:embed templates/images
-	staticEmbed embed.FS
-
 	//go:embed .env
 	envFile embed.FS
 )
@@ -45,21 +37,7 @@ func main() {
 
 
 	stage := os.Getenv("STAGE")
-	if stage == "prod" {
-		fmt.Println("production")
-		templ := template.Must(template.New("").ParseFS(
-			templatesEmbed, "templates/*.html",
-		))
-		r.SetHTMLTemplate(templ)
-		staticFS, _ := fs.Sub(staticEmbed, "templates/images")
-		r.StaticFS("/templates/images", http.FS(staticFS))
-
-	} else {
-		r.LoadHTMLGlob("templates/*.html")
-		r.Static("/templates/images", "./templates/images")
-	}
-
-	r.GET("/", handlers.ConversationTemplate)
+	fmt.Println(stage)
 	r.GET("/conversation/:id", handlers.GetConversationById)
 	r.POST("/send-message", handlers.SendMessage)
 	r.GET("/new-conversation", handlers.CreateNewConversation)

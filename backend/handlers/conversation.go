@@ -41,10 +41,6 @@ sprite 3.00, 2.00, 1.00
 bottled water 5.00 
 `
 
-func ConversationTemplate(c *gin.Context) {
-	c.HTML(http.StatusOK, "conversation.html", gin.H{})
-}
-
 func GetConversationById(c *gin.Context) {
 	
 	conversationId := c.Param("id")
