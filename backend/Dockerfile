@@ -20,7 +20,7 @@ WORKDIR /root/
 
 # Copy the built binary from the previous stage
 COPY --from=build /app/app .
-
+COPY --from=build /app/.env .
 # Expose port used by the Golang application
 EXPOSE 8080
 
