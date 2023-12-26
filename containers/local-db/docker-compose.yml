@@ -3,7 +3,7 @@ version: "3"
 services:
   redis:
     image: redis
-    container_name: redis-ecommerce-container
+    container_name: redis-db-container
     ports:
       - "6379:6379"
     volumes:
@@ -11,7 +11,7 @@ services:
 
   mongodb:
     image: mongo
-    container_name: mongo-ecommerce-container
+    container_name: mongo-db-container
     ports:
       - "27017:27017"
     env_file:

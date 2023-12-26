@@ -2,12 +2,12 @@ version: "3"
 
 services:
   angular-app:
-    image: sofienechihi/my-repo:chatbot-store-fronten
+    image: sofienechihi/my-repo:custom-bots-fronten
     ports:
       - "80:80"
 
   golang-app:
-    image: sofienechihi/my-repo:chatbot-store-backend
+    image: sofienechihi/my-repo:custom-bots-backend
     ports:
       - "9911:9911"
     depends_on:

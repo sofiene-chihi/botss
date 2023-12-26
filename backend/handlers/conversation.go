@@ -3,46 +3,25 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"chatbot-store/models"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var SystemPrompt string = `
-You are OrderBot, an automated service to collect orders for a pizza restaurant. 
-You first greet the customer, then collects the order, 
-and then asks if it's a pickup or delivery. 
-You wait to collect the entire order, then summarize it and check for a final time if the customer wants to add anything else. 
-If it's a delivery, you ask for an address. 
-Finally you collect the payment.
-Make sure to clarify all options, extras and sizes to uniquely identify the item from the menu.
-You respond in a short, very conversational friendly style. 
-The menu includes 
-pepperoni pizza  12.95, 10.00, 7.00 
-cheese pizza  10.95, 9.25, 6.50 
-eggplant pizza   11.95, 9.75, 6.75 
-fries 4.50, 3.50 
-greek salad 7.25 
-Toppings: 
-extra cheese 2.00, 
-mushrooms 1.50 
-sausage 3.00 
-canadian bacon 3.50 
-AI sauce 1.50 
-peppers 1.00 
-Drinks: 
-coke 3.00, 2.00, 1.00 
-sprite 3.00, 2.00, 1.00 
-bottled water 5.00 
-`
-
 func GetConversationById(c *gin.Context) {
-	
+
 	conversationId := c.Param("id")
 	conversationContent, err := models.GetConversationById(conversationId)
 	if err != nil {
@@ -58,7 +37,7 @@ func GetConversationById(c *gin.Context) {
 	} else {
 		// Remove the first element by creating a new slice that excludes it
 		emptyContent := []models.MessageItem{}
-		c.JSON(http.StatusOK, gin.H{"conversationContent": emptyContent })
+		c.JSON(http.StatusOK, gin.H{"conversationContent": emptyContent})
 	}
 }
 
@@ -84,9 +63,10 @@ func CreateNewConversation(c *gin.Context) {
 
 	collection := models.MongoClient.Database("chatbot-conversations").Collection("conversation")
 
-	fmt.Println(SystemPrompt)
+	systemPrompt, err := getSystemPrompt("pizza-restaurant")
+
 	conversationMessages := []models.MessageItem{
-		{Role: "system", Content: SystemPrompt},
+		{Role: "system", Content: systemPrompt},
 	}
 	newConversation := models.Conversation{Messages: conversationMessages}
 	insertResult, err := collection.InsertOne(ctx, newConversation)
@@ -139,4 +119,64 @@ func SendMessage(c *gin.Context) {
 
 	models.AddMessagesToConversation(conversationId, []models.MessageItem{newMessage, newResponse})
 	c.JSON(http.StatusOK, gin.H{"message": returnedMessage})
+}
+
+func getSystemPrompt(topic string) (string, error) {
+
+	region := os.Getenv("AWS_REGION")
+
+	sess, err := session.NewSession(&aws.Config{
+		Region:      aws.String(region),
+		Credentials: credentials.NewStaticCredentials(os.Getenv("ACCESS_KEY_ID"), os.Getenv("SECRET_ACCESS_KEY"), ""),
+	},
+	)
+	if err != nil {
+		log.Println("Failed to create session:", err)
+		return "", err
+	}
+
+	bucketName := os.Getenv("PROMPTS_BUCKET")
+	downloader := s3manager.NewDownloader(sess)
+	promptFileName := ""
+	if topic == "pizza-restaurant" {
+		promptFileName = "pizza-restaurant-bot.txt"
+	} else if topic == "bank" {
+		promptFileName = "bank-bot.txt"
+
+	} else if topic == "tech-store" {
+		promptFileName = "tech-store-bot.txt"
+
+	} else {
+		return "", err
+	}
+
+	file, err := os.Create("downloaded-prompt-file.txt")
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return "", err
+	}
+	defer file.Close()
+
+	// Download the file from S3.
+	_, err = downloader.Download(file,
+		&s3.GetObjectInput{
+			Bucket: aws.String(bucketName),
+			Key:    aws.String(promptFileName),
+		})
+	if err != nil {
+		fmt.Println("Error downloading file:", err)
+		return "", err
+	}
+	fmt.Println("File downloaded successfully!")
+
+	content, err := ioutil.ReadFile("downloaded-file.txt")
+	if err != nil {
+		fmt.Println("Error reading file content:", err)
+		return "", err
+	}
+
+	fmt.Println("File content:")
+	fmt.Println(string(content))
+
+	return string(content), nil
 }
